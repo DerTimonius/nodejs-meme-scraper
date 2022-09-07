@@ -1,6 +1,5 @@
 import * as cheerio from 'cheerio';
 import download from 'download';
-import fs from 'fs';
 import fetch from 'node-fetch';
 
 const getHTML = async () => {
