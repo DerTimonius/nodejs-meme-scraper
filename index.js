@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import * as cheerio from 'cheerio';
 import download from 'download';
 import fetch from 'node-fetch';
@@ -14,7 +15,7 @@ async function getMemes() {
       const image = $(this).attr('src');
       imageURL.push(image);
     });
-    const filePath = `./memes`;
+    const filePath = fs.mkdirSync(`./memes`);
     const firstTenMemes = imageURL.slice(0, 10);
     let counter = 1;
     firstTenMemes.forEach((url) => {
@@ -29,6 +30,4 @@ async function getMemes() {
   }
 }
 
-getMemes()
-  .then(() => {})
-  .catch((err) => console.log(err));
+await getMemes();
