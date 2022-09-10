@@ -7,3 +7,4 @@ yarn-error.log*
 .eslintcache
 *.tsbuildinfo
 memes/
+custom_memes/

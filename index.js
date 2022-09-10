@@ -30,4 +30,26 @@ async function getMemes() {
   }
 }
 
-await getMemes();
+function createMeme(top, bottom, name) {
+  try {
+    const url = `https://api.memegen.link/images/${name}/${top}/${bottom}.jpg`;
+    const folder = fs.mkdirSync('./custom_memes', { recursive: true });
+    fetch(url)
+      .then((res) =>
+        res.body.pipe(fs.createWriteStream(`./custom_memes/${name}.jpg`)),
+      )
+      .catch((err) => console.log(err));
+    console.log('Meme created!');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+if (process.argv.length === 2) {
+  await getMemes();
+} else {
+  const top = String(process.argv[2].toLowerCase().split(' ').join('_'));
+  const bottom = String(process.argv[3].toLowerCase().split(' ').join('_'));
+  const name = String(process.argv[4].toLowerCase().split(' ').join('_'));
+  createMeme(top, bottom, name);
+}
