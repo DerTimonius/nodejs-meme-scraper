@@ -36,7 +36,7 @@ function createMeme(top, bottom, name) {
     const folder = fs.mkdirSync('./custom_memes', { recursive: true });
     fetch(url)
       .then((res) =>
-        res.body.pipe(fs.createWriteStream(`./custom_memes/${name}.jpg`)),
+        res.body.pipe(fs.createWriteStream(`${folder}/${name}.jpg`)),
       )
       .catch((err) => console.log(err));
     console.log('Meme created!');
