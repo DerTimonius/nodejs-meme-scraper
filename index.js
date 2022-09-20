@@ -1,7 +1,15 @@
 import fs from 'node:fs';
 import * as cheerio from 'cheerio';
-import download from 'download';
 import fetch from 'node-fetch';
+
+const filePath = './memes';
+try {
+  if (!fs.existsSync(filePath)) {
+    fs.mkdirSync(filePath);
+  }
+} catch (err) {
+  console.log(err);
+}
 
 async function getMemes() {
   try {
@@ -15,16 +23,18 @@ async function getMemes() {
       const image = $(this).attr('src');
       imageURL.push(image);
     });
-    const filePath = fs.mkdirSync(`./memes`);
     const firstTenMemes = imageURL.slice(0, 10);
     let counter = 1;
-    firstTenMemes.forEach((url) => {
-      download(url, `${filePath}/0${counter}.jpg`)
-        .then(() => console.log('Download successful'))
-        .catch((err) => console.log(err));
+    firstTenMemes.map(async (url) => {
+      await fetch(url).then((res) =>
+        res.body.pipe(
+          fs.createWriteStream(
+            `${filePath}/${counter < 10 ? '0' + counter : counter}.jpg`,
+          ),
+        ),
+      );
       counter++;
     });
-    return body;
   } catch (err) {
     console.log(err);
   }
