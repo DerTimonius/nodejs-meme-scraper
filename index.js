@@ -26,12 +26,14 @@ async function getMemes() {
     const firstTenMemes = imageURL.slice(0, 10);
     let counter = 1;
     firstTenMemes.map(async (url) => {
-      await fetch(url).then((res) =>
-        res.body.pipe(
-          fs.createWriteStream(
-            `${filePath}/${counter < 10 ? '0' + counter : counter}.jpg`,
+      await fetch(url).then(
+        (res) =>
+          res.body.pipe(
+            fs.createWriteStream(
+              `${filePath}/${counter < 10 ? '0' + counter : counter}.jpg`,
+            ),
           ),
-        ),
+        console.log('Download successful!'),
       );
       counter++;
     });
