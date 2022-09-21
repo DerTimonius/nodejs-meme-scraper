@@ -3,9 +3,17 @@ import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
 
 const filePath = './memes';
+const customFilePath = './custom_memes';
 try {
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
+  }
+} catch (err) {
+  console.log(err);
+}
+try {
+  if (!fs.existsSync(customFilePath)) {
+    fs.mkdirSync(customFilePath);
   }
 } catch (err) {
   console.log(err);
@@ -45,10 +53,9 @@ async function getMemes() {
 function createMeme(top, bottom, name) {
   try {
     const url = `https://api.memegen.link/images/${name}/${top}/${bottom}.jpg`;
-    const folder = fs.mkdirSync('./custom_memes', { recursive: true });
     fetch(url)
       .then((res) =>
-        res.body.pipe(fs.createWriteStream(`${folder}/${name}.jpg`)),
+        res.body.pipe(fs.createWriteStream(`${customFilePath}/${name}.jpg`)),
       )
       .catch((err) => console.log(err));
     console.log('Meme created!');
@@ -59,6 +66,8 @@ function createMeme(top, bottom, name) {
 
 if (process.argv.length === 2) {
   await getMemes();
+} else if (process.argv.length < 5) {
+  console.log('Sorry, three inputs needed!');
 } else {
   const top = String(process.argv[2].toLowerCase().split(' ').join('_'));
   const bottom = String(process.argv[3].toLowerCase().split(' ').join('_'));
